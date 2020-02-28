@@ -1,6 +1,6 @@
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
+const Manager = require("./libs/Manager");
+const Engineer = require("./libs/Engineer");
+const Intern = require("./libs/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
@@ -8,7 +8,7 @@ const fs = require("fs");
 const OUTPUT_DIR = path.resolve(__dirname, "output")
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-const render = require("./lib/htmlRenderer");
+const render = require("./libs/htmlRenderer");
 
 const teamMembers = [];
 const id = [];
@@ -73,7 +73,7 @@ function initiateFunction() {
                 const pass = answer.match(
                     /\S+@\S+\.\S+/
                 );
-                if(pass) {
+                if (pass) {
                     return true;
                 }
                 return "Please enter valid email address!"
@@ -81,4 +81,52 @@ function initiateFunction() {
         },
         ///Manger office number. DO like id above.
     ])//.then starts here. 
+
+    // anser this allways name , id , email
+    // const keepasking = true;
+    // const all = [];
+    // while (keepasking) {
+    //     let newPerson = null;
+    //     const { name, id, email } = await mainQuestions();
+    //     switch (postion) {
+
+    //         case "manager":
+    //             const { getOfficeNumber } = await getMangerInfo();
+    //             newPerson = new Manager({ name, id, email, getOfficeNumber })
+    //         case "enginier":
+    //             const { getOfficeNumber } = await getMangerInfo()
+
+
+    //     }
+    //     teamMembers.push(newPerson);
+
+    //     const more = await addmore();
+
+
+    // }
+    //
 }
+
+async function main() {
+    let keepAsking = true;
+    while (keepAsking) {
+        const more = await addMore();
+        
+        if (more.addNew === "no") {
+            keepAsking = false;
+        }
+    }
+}
+
+async function addMore() {
+    return inquirer.prompt([
+        {
+            type: "list",
+            name: "addNew",
+            message: "Would you like add another employee?",
+            choices: ["yes", "no"]
+           
+        },])
+}
+
+main();
