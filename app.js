@@ -4,7 +4,7 @@ const Intern = require("./libs/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-
+let position = null;
 const OUTPUT_DIR = path.resolve(__dirname, "output")
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
@@ -41,9 +41,15 @@ function initiateFunction() {
 
     inquirer.prompt([
         {
+            type: "list",
+            name: "position",
+            message: "What is their position?",
+            choices: ["manager", "engineer", "intern"]
+        },
+        {
             type: "input",
-            name: "nameManager",
-            message: "What is your manager's name?",
+            name: "name",
+            message: "What is their name?",
             validate: answer => {
                 if (answer !== "") {
                     return true;
@@ -53,8 +59,8 @@ function initiateFunction() {
         },
         {
             type: "input",
-            name: "idManager",
-            message: "What is manager's ID?",
+            name: "id",
+            message: "What is their ID?",
             validate: answer => {
                 const pass = answer.match(
                     /^[1-9]\d*$/
@@ -67,8 +73,8 @@ function initiateFunction() {
         },
         {
             type: "input",
-            name: "emailManager",
-            message: "What is manager's email?",
+            name: "email",
+            message: "What is their email?",
             validate: answer => {
                 const pass = answer.match(
                     /\S+@\S+\.\S+/
@@ -80,9 +86,12 @@ function initiateFunction() {
             }
         },
         ///Manger office number. DO like id above.
-    ])//.then starts here. 
+    ]).then(answers => {
+        position = answers.position;
+        main(answers.name,answers.id,answers.email);
+    })
 
-    // anser this allways name , id , email
+    // anser this always name , id , email
     // const keepasking = true;
     // const all = [];
     // while (keepasking) {
@@ -107,12 +116,31 @@ function initiateFunction() {
     //
 }
 
-async function main() {
+async function main(name,id,email) {
     let keepAsking = true;
+    let newPerson = null;
     while (keepAsking) {
         const more = await addMore();
         
-        if (more.addNew === "no") {
+        switch (position) {
+            case "manager":
+                const { getOfficeNumber } = await getOfficeNumber();
+                newPerson = new Manager({ name, id, email, getOfficenumber });
+                teamMembers.push(newPerson);
+            case "engineer":
+                const { getGitHub } = await getGitHub();
+                newPerson = new Engineer({ name, id, email, getGitHub });
+                teamMembers.push(newPerson);
+
+            case "intern":
+                newPerson = new Intern({ name, id, email, getSchool });
+                const { getSchool } = await getSchool(); 
+                teamMembers.push(newPerson);
+
+        }
+
+
+        if (more === "no") {
             keepAsking = false;
         }
     }
@@ -125,8 +153,14 @@ async function addMore() {
             name: "addNew",
             message: "Would you like add another employee?",
             choices: ["yes", "no"]
-           
-        },])
-}
 
-main();
+        },].then(answer => {
+            if(answer === "yes"){
+                initiateFunction();
+            }
+            else{
+                //run a function to create the team
+            }
+        }))
+}
+initiateFunction();
