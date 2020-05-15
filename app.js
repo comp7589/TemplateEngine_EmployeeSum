@@ -4,7 +4,7 @@ const Intern = require("./libs/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-let position = null;
+// let position = null;
 const OUTPUT_DIR = path.resolve(__dirname, "output")
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
@@ -252,6 +252,7 @@ function appPrompt() {
         if (!fs.existsSync(OUTPUT_DIR)) {
             fs.mkdirSync(OUTPUT_DIR)
         }
+        console.log(teamMembers);
         fs.writeFileSync(outputPath, render(teamMembers), "utf-8");
     }
     createManager();
@@ -260,146 +261,3 @@ function appPrompt() {
 
 appPrompt();
 
-
-// function initiateFunction() {
-//     console.log("Build Your Squad.");
-
-//     inquirer.prompt([
-//         {
-//             type: "list",
-//             name: "position",
-//             message: "What is their position?",
-//             choices: ["manager", "engineer", "intern"]
-//         },
-//         {
-//             type: "input",
-//             name: "name",
-//             message: "What is their name?",
-//             validate: answer => {
-//                 if (answer !== "") {
-//                     return true;
-//                 }
-//                 return "Please enter valid name.";
-//             }
-//         },
-//         {
-//             type: "input",
-//             name: "id",
-//             message: "What is their ID?",
-//             validate: answer => {
-//                 const pass = answer.match(
-//                     /^[1-9]\d*$/
-//                 );
-//                 if (pass) {
-//                     return true;
-//                 }
-//                 return "Please enter value greater than zero!"
-//             }
-//         },
-//         {
-//             type: "input",
-//             name: "email",
-//             message: "What is their email?",
-//             validate: answer => {
-//                 const pass = answer.match(
-//                     /\S+@\S+\.\S+/
-//                 );
-//                 if (pass) {
-//                     return true;
-//                 }
-//                 return "Please enter valid email address!"
-//             }
-//         },
-//         {
-//             type: "input",
-//             name: "officeNumber",
-//             message: "What is their office number?",
-//             validate: answer => {
-//                 const pass = answer.match(
-//                     /^[1-9]\d*$/
-//                 );
-//                 if (pass) {
-//                     return true;
-//                 }
-//                 return "Please enter value greater than zero!"
-//             }
-//         }
-
-//     ]).then(answers => {
-//        const position = answers.position;
-//         main(answers.name, answers.id, answers.email);
-//     })
-
-//     // anser this always name , id , email
-//     // const keepasking = true;
-//     // const all = [];
-//     // while (keepasking) {
-//     //     let newPerson = null;
-//     //     const { name, id, email } = await mainQuestions();
-//     //     switch (postion) {
-
-//     //         case "manager":
-//     //             const { getOfficeNumber } = await getMangerInfo();
-//     //             newPerson = new Manager({ name, id, email, getOfficeNumber })
-//     //         case "enginier":
-//     //             const { getOfficeNumber } = await getMangerInfo()
-
-
-//     //     }
-//     //     teamMembers.push(newPerson);
-
-//     //     const more = await addmore();
-
-
-//     // }
-//     //
-// }
-
-// async function main(name, id, email) {
-//     let keepAsking = true;
-//     let newPerson = null;
-//     while (keepAsking) {
-//         const more = await addMore();
-
-//         switch (position) {
-//             case "manager":
-//                 const { getOfficeNumber } = await getOfficeNumber();
-//                 newPerson = new Manager({ name, id, email, getOfficenumber });
-//                 teamMembers.push(newPerson);
-//             case "engineer":
-//                 const { getGitHub } = await getGitHub();
-//                 newPerson = new Engineer({ name, id, email, getGitHub });
-//                 teamMembers.push(newPerson);
-
-//             case "intern":
-//                 newPerson = new Intern({ name, id, email, getSchool });
-//                 const { getSchool } = await getSchool();
-//                 teamMembers.push(newPerson);
-
-//         }
-
-
-//         if (more === "no") {
-//             keepAsking = false;
-//         }
-//     }
-// }
-
-// async function addMore() {
-//     return inquirer.prompt([
-//         {
-//             type: "list",
-//             name: "addNew",
-//             message: "Would you like add another employee?",
-//             choices: ["yes", "no"]
-
-//         },].then(answer => {
-//             if (answer === "yes") {
-//                 initiateFunction();
-//             }
-//             else {
-//                 //run a function to create the team
-//             }
-//         }))
-// }
-// initiateFunction();
